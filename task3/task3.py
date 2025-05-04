@@ -1,35 +1,33 @@
 import json
+import sys
 
-values_file = 'values.json'
-tests_file = 'tests.json'
-report_file = 'report.json'
+if len(sys.argv) != 4:
+    print("Нужно указать 3 файла: values.json, tests.json, report.json")
+    exit()
+
+values_file = sys.argv[1]
+tests_file = sys.argv[2]
+report_file = sys.argv[3]
+
+with open(values_file) as f:
+    values = json.load(f)
+
+with open(tests_file) as f:
+    tests = json.load(f)
 
 
-def read_json(file_path):
-    with open(file_path, 'r') as file:
-        return json.load(file)
-
-
-def write_json(data, file_path):
-    with open(file_path, 'w') as file:
-        json.dump(data, file, indent=2)
-
-
-def fill_values(tests, values):
-    for key, value in tests.items():
-        if isinstance(value, dict):
-            fill_values(value, values)
-        elif key == "id" and isinstance(value, str):
-            test_id = int(value)
-            for val in values:
-                if val['id'] == test_id:
-                    tests[key] = val['value']
+def insert_values(test_list, values_list):
+    for test in test_list:
+        if "id" in tests:
+            for v in values_list:
+                if v["id"] == test["id"]:
+                    test["value"] = v["value"]
                     break
+        if "values" in test:
+            insert_values(test["values"], values_list)
 
 
-values = read_json(values_file)
-tests = read_json(tests_file)
+insert_values(tests["tests"], values)
 
-fill_values(tests, values)
-
-write_json(tests, report_file)
+with open(report_file, 'w') as f:
+    json.dump(tests, f, indent=2)

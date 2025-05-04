@@ -1,11 +1,15 @@
+import sys
 from math import sqrt
 
-circle_file = 'circle.txt'
-dots_file = 'dot.txt'
+if len(sys.argv) != 3:
+    print("Usage: python task2.py circle_file.txt dot_file.txt")
+    sys.exit(1)
+
+circle_file = sys.argv[1]
+dots_file = sys.argv[2]
 
 with open(circle_file) as f:
-    xc, yc = f.readline().split()
-    xc, yc = float(xc), float(yc)
+    xc, yc = map(float, f.readline().split())
     r = float(f.readline())
 
 with open(dots_file) as f:
