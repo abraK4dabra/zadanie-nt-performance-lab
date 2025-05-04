@@ -2,7 +2,7 @@ import sys
 from math import sqrt
 
 if len(sys.argv) != 3:
-    print("Usage: python task2.py circle_file.txt dot_file.txt")
+    print("Используйте: python task2.py circle_file.txt dot_file.txt")
     sys.exit(1)
 
 circle_file = sys.argv[1]
